@@ -9,10 +9,11 @@ class Distance:
         self.km = float(km)
 
     def __str__(self) -> str:
-        return f"Distance: {self.km:.2f} kilometers."
+        return f"Distance: {self.km} kilometers.\n"
 
     def __repr__(self) -> str:
-        return f"Distance(km={self.km})"
+        km_repr = int(self.km) if self.km == int(self.km) else self.km
+        return f"Distance(km={km_repr})"
 
     def _value(self, other: Any) -> float | None:
         if isinstance(other, Distance):
@@ -49,7 +50,8 @@ class Distance:
         if isinstance(other, (int, float)):
             if other == 0:
                 raise ZeroDivisionError("Division by zero is not allowed.")
-            return Distance(self.km / other)
+            result_km = round(self.km / other, 2)
+            return Distance(result_km)
         return NotImplemented
 
     def __eq__(self, other: Any) -> bool:
