@@ -11,7 +11,7 @@ class Distance:
 
     def __str__(self) -> str:
         km_str = int(self.km) if self.km == int(self.km) else self.km
-        return f"Distance: {km_str} kilometers.\n"
+        return f"Distance: {km_str} kilometers."
 
     def __repr__(self) -> str:
         km_repr = int(self.km) if self.km == int(self.km) else self.km
