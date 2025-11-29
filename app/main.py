@@ -2,6 +2,7 @@ from __future__ import annotations
 from functools import total_ordering
 from typing import Any
 
+
 @total_ordering
 class Distance:
     def __init__(self, km: float) -> None:
@@ -21,18 +22,18 @@ class Distance:
         return None
 
     def __add__(self, other: float | int | Distance) -> Distance | Any:
-        val = self._value(other)
-        if val is not None:
-            return Distance(self.km + val)
+        other_value = self._value(other)
+        if other_value is not None:
+            return Distance(self.km + other_value)
         return NotImplemented
 
     def __radd__(self, other: float | int | Distance) -> Distance | Any:
         return self.__add__(other)
 
     def __iadd__(self, other: float | int | Distance) -> Distance | Any:
-        val = self._value(other)
-        if val is not None:
-            self.km += val
+        other_value = self._value(other)
+        if other_value is not None:
+            self.km += other_value
             return self
         return NotImplemented
 
@@ -52,13 +53,13 @@ class Distance:
         return NotImplemented
 
     def __eq__(self, other: Any) -> bool:
-        val = self._value(other)
-        if val is not None:
-            return self.km == val
+        other_value = self._value(other)
+        if other_value is not None:
+            return self.km == other_value
         return NotImplemented
 
     def __lt__(self, other: Any) -> bool:
-        val = self._value(other)
-        if val is not None:
-            return self.km < val
+        other_value = self._value(other)
+        if other_value is not None:
+            return self.km < other_value
         return NotImplemented
