@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from functools import total_ordering
 from typing import Any
 
@@ -9,7 +10,7 @@ class Distance:
         self.km = float(km)
 
     def __str__(self) -> str:
-        return f"Distance: {self.km} kilometers.\n"
+        return f"Distance: {self.km} kilometers."
 
     def __repr__(self) -> str:
         km_repr = int(self.km) if self.km == int(self.km) else self.km
@@ -22,46 +23,46 @@ class Distance:
             return float(other)
         return None
 
-    def __add__(self, other: float | int | Distance) -> Distance | Any:
+    def __add__(self, other: float | int | Distance) -> Distance:
         other_value = self._value(other)
         if other_value is not None:
             return Distance(self.km + other_value)
-        return NotImplemented
+        return NotImplemented  # type: ignore[return-value]
 
-    def __radd__(self, other: float | int | Distance) -> Distance | Any:
+    def __radd__(self, other: float | int | Distance) -> Distance:
         return self.__add__(other)
 
-    def __iadd__(self, other: float | int | Distance) -> Distance | Any:
+    def __iadd__(self, other: float | int | Distance) -> Distance:
         other_value = self._value(other)
         if other_value is not None:
             self.km += other_value
             return self
-        return NotImplemented
+        return NotImplemented  # type: ignore[return-value]
 
-    def __mul__(self, other: float | int) -> Distance | Any:
+    def __mul__(self, other: float | int) -> Distance:
         if isinstance(other, (int, float)):
             return Distance(self.km * other)
-        return NotImplemented
+        return NotImplemented  # type: ignore[return-value]
 
-    def __rmul__(self, other: float | int) -> Distance | Any:
+    def __rmul__(self, other: float | int) -> Distance:
         return self.__mul__(other)
 
-    def __truediv__(self, other: float | int) -> Distance | Any:
+    def __truediv__(self, other: float | int) -> Distance:
         if isinstance(other, (int, float)):
             if other == 0:
                 raise ZeroDivisionError("Division by zero is not allowed.")
             result_km = round(self.km / other, 2)
             return Distance(result_km)
-        return NotImplemented
+        return NotImplemented  # type: ignore[return-value]
 
     def __eq__(self, other: Any) -> bool:
         other_value = self._value(other)
         if other_value is not None:
             return self.km == other_value
-        return NotImplemented
+        return NotImplemented  # type: ignore[return-value]
 
     def __lt__(self, other: Any) -> bool:
         other_value = self._value(other)
         if other_value is not None:
             return self.km < other_value
-        return NotImplemented
+        return NotImplemented  # type: ignore[return-value]
