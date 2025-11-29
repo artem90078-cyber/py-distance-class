@@ -1,84 +1,64 @@
+from __future__ import annotations
+from functools import total_ordering
+from typing import Any
+
+@total_ordering
 class Distance:
     def __init__(self, km: float) -> None:
-        self.km: float = km
+        self.km = float(km)
 
     def __str__(self) -> str:
-        return f"Distance: {self.km} kilometers."
+        return f"Distance: {self.km:.2f} kilometers."
 
     def __repr__(self) -> str:
         return f"Distance(km={self.km})"
 
-    # Addition
-    def __add__(self, other):
+    def _value(self, other: Any) -> float | None:
         if isinstance(other, Distance):
-            return Distance(self.km + other.km)
-        elif isinstance(other, (int, float)):
-            return Distance(self.km + other)
+            return other.km
+        if isinstance(other, (int, float)):
+            return float(other)
+        return None
+
+    def __add__(self, other: float | int | Distance) -> Distance | Any:
+        val = self._value(other)
+        if val is not None:
+            return Distance(self.km + val)
         return NotImplemented
 
-    def __radd__(self, other):
+    def __radd__(self, other: float | int | Distance) -> Distance | Any:
         return self.__add__(other)
 
-    def __iadd__(self, other):
-        if isinstance(other, Distance):
-            self.km += other.km
-        elif isinstance(other, (int, float)):
-            self.km += other
-        else:
-            return NotImplemented
-        return self
+    def __iadd__(self, other: float | int | Distance) -> Distance | Any:
+        val = self._value(other)
+        if val is not None:
+            self.km += val
+            return self
+        return NotImplemented
 
-    # Multiplication
-    def __mul__(self, other):
+    def __mul__(self, other: float | int) -> Distance | Any:
         if isinstance(other, (int, float)):
             return Distance(self.km * other)
         return NotImplemented
 
-    def __rmul__(self, other):
+    def __rmul__(self, other: float | int) -> Distance | Any:
         return self.__mul__(other)
 
-    # Division
-    def __truediv__(self, other):
+    def __truediv__(self, other: float | int) -> Distance | Any:
         if isinstance(other, (int, float)):
             if other == 0:
                 raise ZeroDivisionError("Division by zero is not allowed.")
-            return Distance(round(self.km / other, 2))
+            return Distance(self.km / other)
         return NotImplemented
 
-    # Comparison helpers
-    def _value(self, other):
-        if isinstance(other, Distance):
-            return other.km
-        elif isinstance(other, (int, float)):
-            return float(other)
+    def __eq__(self, other: Any) -> bool:
+        val = self._value(other)
+        if val is not None:
+            return self.km == val
         return NotImplemented
 
-    def __lt__(self, other):
-        target = self._value(other)
-        if target is NotImplemented:
-            return NotImplemented
-        return self.km < target
-
-    def __gt__(self, other):
-        target = self._value(other)
-        if target is NotImplemented:
-            return NotImplemented
-        return self.km > target
-
-    def __eq__(self, other):
-        target = self._value(other)
-        if target is NotImplemented:
-            return NotImplemented
-        return self.km == target
-
-    def __le__(self, other):
-        target = self._value(other)
-        if target is NotImplemented:
-            return NotImplemented
-        return self.km <= target
-
-    def __ge__(self, other):
-        target = self._value(other)
-        if target is NotImplemented:
-            return NotImplemented
-        return self.km >= target
+    def __lt__(self, other: Any) -> bool:
+        val = self._value(other)
+        if val is not None:
+            return self.km < val
+        return NotImplemented
